@@ -1,0 +1,7 @@
+name = Views Subview
+description = Table style with per-row collapsible subview.
+type = module
+backdrop = 1.x
+package = Perideo
+dependencies[] = views
+dependencies[] = enhancedtable

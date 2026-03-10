@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function subbview_views_api() {
+  return array(
+    'api' => '3.0',
+    'path' => backdrop_get_path('module', 'subbview') . '/views',
+  );
+}
+
+/**
+ * Implements hook_autoload_info().
+ */
+ 
+function subbview_autoload_info() {
+  // Map class → file. Prevents silent misses if Views doesn't include the file.
+  return array(
+    'views_plugin_style_subbview_table' => 'views/views_plugin_style_subbview_table.inc',    
+  );
+}
+
+
+function subbview_library_info() {
+  $base = backdrop_get_path('module', 'subbview');
+  return array(
+    'subbview' => array(
+      'title' => 'Subbview UI',
+      'version' => '1.x',
+      'js'  => array($base . '/js/subbview.js' => array()),
+      'css' => array($base . '/css/subbview.css' => array('type' => 'file', 'media' => 'all')),
+    ),
+  );
+}
+
+
+/**
+ * Load assets only when our style is in use.
+ */
+
+function subbview_views_pre_render(&$view) {
+  if (!empty($view->style_plugin) && ($view->style_plugin instanceof views_plugin_style_subbview_table)) {
+    backdrop_add_library('subbview', 'subbview');
+  }
+}
+
+
+/*
+// Debug logging
+function subbview_init() {
+  // Safe check. No autoload.
+
+  if (class_exists('views_plugin_style_subbview_table')) {
+    watchdog('subbview', 'Class views_plugin_style_subbview_table exists!');
+  } else {
+    watchdog('subbview', 'Class views_plugin_style_subbview_table NOT loaded');
+  }
+}
+*/
+
+/**
+ * Build Subview-only help UI for the Subbview settings screen.
+ *
+ * @return array
+ *   A Backdrop Form API render array.
+ */
+function subbview_build_subview_help_form() {
+  $help = array(
+    '#type' => 'fieldset',
+    '#title' => t('Subview help'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#weight' => 1,
+    '#attributes' => array('class' => array('subbview-help')),
+    '#description' => t('Guidance for embedded subviews, row toggles, nesting, and recursion safeguards.'),
+  );
+
+  $help['subview_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Subview settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#weight' => 0,
+    'text' => array(
+      '#type' => 'markup',
+      '#markup' => ''
+        . '<p><strong>' . t('Embed a Subview for each row') . '</strong></p>'
+        . '<p>' . t('Enable this to render an embedded subview beneath each row of the parent table.') . '</p>'
+        . '<p>' . t('When disabled, the view renders as a normal table without subrows or expand/collapse controls.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Subview target') . '</strong></p>'
+        . '<p>' . t('Select the view display to embed beneath each row.') . '</p>'
+        . '<p>' . t('The selected display receives an argument from the parent row based on the field chosen in <em>Argument source field</em>.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Argument source field') . '</strong></p>'
+        . '<p>' . t('Choose the parent-row field whose value should be passed to the embedded subview as its argument.') . '</p>'
+        . '<p>' . t('This field should correspond to the contextual filter expected by the target subview display.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Per-row expand button column') . '</strong></p>'
+        . '<p>' . t('Choose which rendered column should contain the expand/collapse control for each row.') . '</p>'
+        . '<p>' . t('If columns are merged, the control is placed in the rendered destination column, not in a hidden merged column.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Indent Subview') . '</strong></p>'
+        . '<p>' . t('Adds visual indentation to the embedded subview row so it appears nested beneath the parent row.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Start collapsed on initial load') . '</strong></p>'
+        . '<p>' . t('When enabled, each embedded subview starts closed and is shown only after the user expands the row.') . '</p>'
+        . '<p>' . t('When disabled, all embedded subviews are shown initially.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Expand-exclusive (accordion style)') . '</strong></p>'
+        . '<p>' . t('When enabled, opening one row closes any other currently open row in the same table.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Allow embedding the same view') . '</strong></p>'
+        . '<p>' . t('Allows a Subview display to embed another display from the same View.') . '</p>'
+        . '<p>' . t('Use with care.') . '</p>'
+        . '<p>' . t('Nested subviews are supported, but circular embedding relationships can cause recursion problems or excessive rendering load. Avoid configurations such as a display embedding itself directly, or View A embedding View B while View B embeds View A.') . '</p>'
+        . '<hr />'
+        . '<p><strong>' . t('Nested subviews') . '</strong></p>'
+        . '<p>' . t('A Subview may itself be another <em>Table with Sub views</em> display.') . '</p>'
+        . '<p>' . t('This allows multi-level nested tables. However:') . '</p>'
+        . '<ul>'
+        . '<li>' . t('deeper nesting increases rendering cost') . '</li>'
+        . '<li>' . t('click sorting and styling apply independently to each rendered table') . '</li>'
+        . '<li>' . t('Child subviews may inherit some styling from the parent table. This is normal in the current implementation and can usually be overridden in the subview\'s own table settings or CSS.') . '</li>'
+        . '</ul>',
+    ),
+  );
+
+  return $help;
+}
+

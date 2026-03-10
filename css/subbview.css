@@ -1,0 +1,73 @@
+.sv-table {
+    table-layout: fixed;
+    width: 100%; 
+}
+
+.sv-subview table { 
+    table-layout: fixed;
+    width: 100%;
+}
+
+.sv-table th,
+.sv-table td,
+.sv-subview table th,
+.sv-subview table td {
+    box-sizing: border-box;
+}
+
+.sv-parent .sv-toggle {
+    border: 0; background: none; 
+    cursor: pointer;
+    padding: 0 4px;
+    text-decoration-color: brown;
+}
+
+.sv-subrow.is-collapsed {
+    display: none;
+}
+
+.sv-subrow.is-open {
+    display: table-row;
+}
+
+.sv-subcell {
+    padding: 0;
+}
+
+.sv-subwrap {
+    padding: 6px 0;
+}
+
+.sv-subview table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.sv-tools {
+    text-align: right;
+    margin-bottom: .25rem;
+}
+
+.sv-tools .sv-expand-all,
+.sv-tools .sv-collapse-all {
+    margin-left: .25rem;
+}
+
+/* Header toggle aligns like row toggles */
+th .sv-toggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+/* admin-only styling */
+.subbview-target-wrap .form-item {
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:12px;
+}
+
+.subbview-selected-view {
+    font-weight:600;
+}
