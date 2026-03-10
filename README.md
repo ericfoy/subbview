@@ -1,4 +1,4 @@
-# SubView# Views Table with Subviews
+# Views Table with Subviews
 
 **Views Table with Subviews** provides a Views style plugin for Backdrop CMS that renders a table whose rows can expand to reveal an embedded subview beneath each parent row.
 
@@ -139,5 +139,6 @@ Because this module depends on **Views Enhanced Table**, those displays also dep
 - Sponsored by [Perideo LLC](https://perideo.com)
 
 ## License
+
 
 This project is GPL v2 software. See the LICENSE.txt file in this directory for complete text.
