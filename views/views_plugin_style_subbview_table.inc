@@ -5,24 +5,6 @@ if (module_exists('enhancedtable')) {
   module_load_include('inc', 'enhancedtable', 'views/enhancedtable_base_style_table');
 }
 
-/*
-// If BetterTable is enabled, load the file that defines its style plugin class.
-if (module_exists('bettertable')) {
-  // Adjust this to the actual file that contains bettertable_plugin_style_table.
-  module_load_include('inc', 'bettertable', 'plugins/bettertable_plugin_style_table');
-}
-
-// Define a shim parent class name that always exists.
-if (class_exists('bettertable_plugin_style_table')) {
-  class subbview_table_parent extends bettertable_plugin_style_table {}
-}
-else {
-  class subbview_table_parent extends views_plugin_style_table {}
-}
-
-// Your plugin handler (defined once).
-class views_plugin_style_subbview_table extends subbview_table_parent {
-*/
 class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
 
   protected $icon_closed = '▼'; // right arrow ⁎↓→■□○◌◊♦►▼●ꜜꜛ⸕⸎→↑↓↕↨∆˃˂˄˅ǂǁ
