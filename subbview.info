@@ -4,4 +4,4 @@ type = module
 backdrop = 1.x
 package = Perideo
 dependencies[] = views
-dependencies[] = enhancedtable
+dependencies[] = enhancedtable (>=1.x-0.2.0-alpha2)
