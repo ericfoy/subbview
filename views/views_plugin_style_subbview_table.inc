@@ -14,13 +14,12 @@ class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
     $o = parent::option_definition();
     // NULL means "not explicitly set yet" so legacy configured displays can
     // infer enabled behavior while brand-new displays remain off by default.
-    $o['embed_subview']     = array('default' => NULL);
+    $o['embed_subview']     = array('default' => FALSE);
     $o['subbview_view']     = array('default' => '');
     $o['subbview_display']  = array('default' => 'default');
     $o['arg_source_field']  = array('default' => '');
     $o['start_collapsed']   = array('default' => TRUE);
     $o['indent_px']         = array('default' => 32);
-    $o['stripe_rows']       = array('default' => TRUE);  // legacy back-compat only
     $o['accordion']         = array('default' => FALSE);
     $o['allow_same_view'] = array('default' => TRUE); // optional toggle
     $o['row_toggle_column'] = array('default' => ''); // '' = first visible column (default)
@@ -314,14 +313,7 @@ class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
           }
         }
 
-        // Decide whether to embed subviews for each row.
-        // Back-compat: older saved displays will not have embed_subview yet.
-        // In that case, infer enabled when the legacy subview target + argument
-        // source are already configured.
-        $embed_enabled = isset($this->options['embed_subview'])
-          ? !empty($this->options['embed_subview'])
-          : (!empty($this->options['subbview_view']) && !empty($this->options['arg_source_field']));
-
+        $embed_enabled = !empty($this->options['embed_subview']);
         // An explicitly enabled subview still requires a valid target + arg source.
         if ($embed_enabled && (empty($this->options['subbview_view']) || empty($this->options['arg_source_field']))) {
           $embed_enabled = FALSE;
@@ -531,9 +523,6 @@ class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
         if (array_key_exists('row_class_special', $this->options)) {
           $do_striping = !empty($this->options['row_class_special']);
         }
-        elseif (array_key_exists('stripe_rows', $this->options)) {
-          $do_striping = !empty($this->options['stripe_rows']);
-        }
 
         foreach ($result as $i => $row) {
           // Keep row context sane for handlers that look at it.
@@ -651,7 +640,7 @@ class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
             }
 
             $sub_html = '<div class="sv-subwrap" style="padding-left:' . check_plain($indent) . '">' .
-                        '<div class="sv-subbview" data-arg="' . check_plain($arg) . '">' . $child_markup . '</div>' .
+                        '<div class="sv-subview" data-arg="' . check_plain($arg) . '">' . $child_markup . '</div>' .
                         '</div>';
 
             $rows[] = array(
@@ -725,10 +714,12 @@ class views_plugin_style_subbview_table extends enhancedtable_base_style_table {
       $so['subbview_display'] = $d;
     }
 
+/* DELETEME: no longer needed since we keep legacy stripe_rows in sync with row_class_special on load, and the form now only edits row_class_special. This just adds confusion and a potential for bugs if we ever add more legacy options that need syncing.
     // Keep the legacy stripe_rows value synchronized for backwards compatibility.
     if (array_key_exists('row_class_special', $so)) {
       $so['stripe_rows'] = !empty($so['row_class_special']) ? 1 : 0;
     }
+*/
 
     // A disabled subview should behave as a plain table without requiring the
     // user to discard previously selected target/field values.
