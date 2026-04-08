@@ -1,0 +1,14 @@
+
+*.zip
+ARC-*.php
+*.txt
+*.ods
+#*.html
+README.md
+LICENSE.txt
+/.vscode/
+/ARCHIVE/
+/stubs/
+/SCRATCH/
+
+
