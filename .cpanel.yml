@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - /bin/bash "$HOME/repositories/deploy_repo.sh" "$(basename "$PWD")"
+    
